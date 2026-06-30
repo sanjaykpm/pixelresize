@@ -9,6 +9,7 @@ import {
   Lock,
   Sparkles,
   Check,
+  X,
   Star,
   Upload,
 } from 'lucide-react';
@@ -119,18 +120,18 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Tools Grid */}
+      {/* Popular Tools */}
       <section className="container py-16 md:py-20">
         <div className="mx-auto mb-12 max-w-2xl text-center">
           <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
             All the tools you need
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Professional image processing tools, all free and running entirely in your browser.
+            24 professional image processing tools, all free and running entirely in your browser.
           </p>
         </div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {TOOLS.map((tool, i) => (
+          {TOOLS.filter((t) => !t.isNew).map((tool, i) => (
             <Link
               key={tool.href}
               href={tool.href}
@@ -145,6 +146,95 @@ export default function HomePage() {
               <ArrowRight className="absolute right-6 top-6 h-4 w-4 text-muted-foreground opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* Recently Added */}
+      <section className="border-y border-border/40 bg-muted/20">
+        <div className="container py-16 md:py-20">
+          <div className="mx-auto mb-12 max-w-2xl text-center">
+            <Badge variant="secondary" className="mb-3 gap-1.5">
+              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              New
+            </Badge>
+            <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
+              Recently added tools
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              New image processing tools we have just launched.
+            </p>
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {TOOLS.filter((t) => t.isNew).slice(0, 8).map((tool, i) => (
+              <Link
+                key={tool.href}
+                href={tool.href}
+                className="group glass-card relative overflow-hidden rounded-2xl p-6 transition-all hover:-translate-y-1 hover:glow animate-fade-in"
+                style={{ animationDelay: `${i * 50}ms` }}
+              >
+                <div className="absolute right-3 top-3">
+                  <Badge variant="secondary" className="bg-primary/10 text-primary">New</Badge>
+                </div>
+                <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${tool.color} text-white shadow-lg`}>
+                  <tool.icon className="h-6 w-6" />
+                </div>
+                <h3 className="mb-1 font-display text-lg font-semibold">{tool.title}</h3>
+                <p className="text-sm text-muted-foreground">{tool.description}</p>
+                <ArrowRight className="absolute bottom-6 right-6 h-4 w-4 text-muted-foreground opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Table */}
+      <section className="container py-16 md:py-20">
+        <div className="mx-auto mb-12 max-w-2xl text-center">
+          <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
+            How we compare
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            See why PixelResize is the best free image processing tool.
+          </p>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="border-b border-border">
+                <th className="py-4 text-left text-sm font-semibold">Feature</th>
+                <th className="py-4 text-center text-sm font-semibold text-primary">PixelResize</th>
+                <th className="py-4 text-center text-sm font-semibold text-muted-foreground">TinyPNG</th>
+                <th className="py-4 text-center text-sm font-semibold text-muted-foreground">iLoveIMG</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ['100% Free', true, false, false],
+                ['No sign-up required', true, false, false],
+                ['Privacy (no uploads)', true, false, false],
+                ['Batch processing', true, true, true],
+                ['24+ tools', true, false, true],
+                ['No watermarks', true, true, false],
+                ['Works offline', true, false, false],
+                ['QR code generator', true, false, false],
+                ['Meme generator', true, false, false],
+                ['Color picker', true, false, false],
+              ].map(([feature, pr, tp, il]) => (
+                <tr key={feature as string} className="border-b border-border/50">
+                  <td className="py-3 text-sm">{feature}</td>
+                  <td className="py-3 text-center">
+                    {pr ? <Check className="mx-auto h-4 w-4 text-success" /> : <X className="mx-auto h-4 w-4 text-muted-foreground" />}
+                  </td>
+                  <td className="py-3 text-center">
+                    {tp ? <Check className="mx-auto h-4 w-4 text-success" /> : <X className="mx-auto h-4 w-4 text-muted-foreground" />}
+                  </td>
+                  <td className="py-3 text-center">
+                    {il ? <Check className="mx-auto h-4 w-4 text-success" /> : <X className="mx-auto h-4 w-4 text-muted-foreground" />}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
 
@@ -280,6 +370,26 @@ export default function HomePage() {
               </AccordionItem>
             ))}
           </Accordion>
+        </div>
+      </section>
+
+      {/* Newsletter */}
+      <section className="container pb-20">
+        <div className="glass-card mx-auto max-w-2xl rounded-3xl p-8 text-center md:p-12">
+          <h2 className="font-display text-2xl font-bold tracking-tight md:text-3xl">
+            Stay updated
+          </h2>
+          <p className="mt-2 text-muted-foreground">
+            Get notified when we launch new tools and features. No spam, unsubscribe anytime.
+          </p>
+          <form className="mx-auto mt-6 flex max-w-md gap-2" onSubmit={(e) => e.preventDefault()}>
+            <input
+              type="email"
+              placeholder="you@example.com"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            />
+            <Button type="submit">Subscribe</Button>
+          </form>
         </div>
       </section>
 

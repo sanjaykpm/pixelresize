@@ -1,78 +1,97 @@
-import type { Metadata } from 'next';
+'use client';
+
+import * as React from 'react';
 import Link from 'next/link';
-import { ArrowRight, Calendar } from 'lucide-react';
+import { ArrowRight, Calendar, Search, Tag } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-
-export const metadata: Metadata = {
-  title: 'Blog',
-  description: 'Image processing tips, tutorials, and guides from the PixelResize team.',
-};
-
-const POSTS = [
-  {
-    slug: 'png-vs-jpeg-vs-webp',
-    title: 'PNG vs JPEG vs WEBP: Which Format Should You Use?',
-    excerpt: 'A practical guide to choosing the right image format for your needs, with real-world examples and file size comparisons.',
-    date: '2025-01-15',
-    readTime: '8 min',
-    category: 'Guides',
-  },
-  {
-    slug: 'how-to-compress-images-without-losing-quality',
-    title: 'How to Compress Images Without Losing Quality',
-    excerpt: 'Learn the techniques behind lossless and lossy compression, and how to find the perfect balance between file size and quality.',
-    date: '2025-01-10',
-    readTime: '6 min',
-    category: 'Tutorials',
-  },
-  {
-    slug: 'image-resize-best-practices',
-    title: 'Image Resize Best Practices for the Web',
-    excerpt: 'Optimize your images for the web with these resizing best practices that improve load times and Core Web Vitals.',
-    date: '2025-01-05',
-    readTime: '5 min',
-    category: 'Web Performance',
-  },
-  {
-    slug: 'understanding-aspect-ratios',
-    title: 'Understanding Aspect Ratios for Social Media',
-    excerpt: 'A complete reference for the correct aspect ratios across Instagram, YouTube, LinkedIn, Facebook, and more.',
-    date: '2024-12-28',
-    readTime: '7 min',
-    category: 'Guides',
-  },
-  {
-    slug: 'why-browser-based-image-processing',
-    title: 'Why Browser-Based Image Processing Is the Future',
-    excerpt: 'Discover the privacy, speed, and cost benefits of processing images locally in the browser versus server-side.',
-    date: '2024-12-20',
-    readTime: '4 min',
-    category: 'Technology',
-  },
-  {
-    slug: 'watermarking-images-for-copyright-protection',
-    title: 'Watermarking Images for Copyright Protection',
-    excerpt: 'How to add effective watermarks to your images to protect your intellectual property online.',
-    date: '2024-12-15',
-    readTime: '5 min',
-    category: 'Tutorials',
-  },
-];
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { BLOG_POSTS, BLOG_CATEGORIES } from '@/lib/blog-data';
+import { cn } from '@/lib/utils';
 
 export default function BlogPage() {
+  const [search, setSearch] = React.useState('');
+  const [category, setCategory] = React.useState('All');
+
+  const filtered = BLOG_POSTS.filter((post) => {
+    const matchesCategory = category === 'All' || post.category === category;
+    const matchesSearch =
+      !search ||
+      post.title.toLowerCase().includes(search.toLowerCase()) ||
+      post.excerpt.toLowerCase().includes(search.toLowerCase()) ||
+      post.tags.some((t) => t.toLowerCase().includes(search.toLowerCase()));
+    return matchesCategory && matchesSearch;
+  });
+
+  const featured = BLOG_POSTS.find((p) => p.featured);
+
   return (
     <div className="container max-w-6xl py-12 md:py-20">
-        <div className="mx-auto mb-12 max-w-2xl text-center">
-          <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
-            PixelResize Blog
-          </h1>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Tips, tutorials, and guides on image processing and optimization.
-          </p>
-        </div>
+      <div className="mx-auto mb-12 max-w-2xl text-center">
+        <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
+          PixelResize Blog
+        </h1>
+        <p className="mt-4 text-lg text-muted-foreground">
+          Tips, tutorials, and guides on image processing and optimization.
+        </p>
+      </div>
 
+      {featured && (
+        <Link
+          href={`/blog/${featured.slug}`}
+          className="group glass-card mb-8 flex flex-col overflow-hidden rounded-2xl md:flex-row"
+        >
+          <div className="aspect-video bg-gradient-to-br from-primary/30 to-chart-2/30 md:w-1/2" />
+          <div className="flex flex-1 flex-col justify-center p-8">
+            <Badge className="mb-3 w-fit" variant="secondary">Featured</Badge>
+            <h2 className="font-display text-2xl font-bold leading-snug group-hover:text-primary">
+              {featured.title}
+            </h2>
+            <p className="mt-2 text-muted-foreground">{featured.excerpt}</p>
+            <div className="mt-4 flex items-center gap-3 text-sm text-muted-foreground">
+              <span>{featured.author}</span>
+              <span>·</span>
+              <span>{featured.readTime} read</span>
+            </div>
+          </div>
+        </Link>
+      )}
+
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap gap-2">
+          {BLOG_CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setCategory(cat)}
+              className={cn(
+                'rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
+                category === cat
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground hover:bg-accent/10'
+              )}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+        <div className="relative sm:w-64">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search articles..."
+            className="pl-9"
+          />
+        </div>
+      </div>
+
+      {filtered.length === 0 ? (
+        <div className="py-16 text-center">
+          <p className="text-muted-foreground">No articles found. Try a different search or category.</p>
+        </div>
+      ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {POSTS.map((post) => (
+          {filtered.map((post) => (
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
@@ -91,7 +110,15 @@ export default function BlogPage() {
                   {post.title}
                 </h2>
                 <p className="mb-4 flex-1 text-sm text-muted-foreground">{post.excerpt}</p>
-                <div className="flex items-center justify-between text-sm">
+                <div className="flex flex-wrap gap-1.5">
+                  {post.tags.slice(0, 3).map((tag) => (
+                    <span key={tag} className="flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+                      <Tag className="h-2.5 w-2.5" />
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-4 flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">{post.readTime} read</span>
                   <ArrowRight className="h-4 w-4 text-primary opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
                 </div>
@@ -99,6 +126,16 @@ export default function BlogPage() {
             </Link>
           ))}
         </div>
+      )}
+
+      <div className="mt-16 rounded-2xl bg-gradient-to-br from-primary to-chart-2 p-8 text-center text-primary-foreground">
+        <h2 className="font-display text-2xl font-bold">Subscribe to our newsletter</h2>
+        <p className="mt-2 text-primary-foreground/80">Get the latest image processing tips delivered to your inbox.</p>
+        <div className="mx-auto mt-6 flex max-w-md gap-2">
+          <Input placeholder="you@example.com" className="bg-background/90 text-foreground" />
+          <Button variant="secondary">Subscribe</Button>
+        </div>
+      </div>
     </div>
   );
 }

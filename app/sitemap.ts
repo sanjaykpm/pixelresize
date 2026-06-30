@@ -1,17 +1,10 @@
 import type { MetadataRoute } from 'next';
+import { TOOLS } from '@/lib/site-config';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = 'https://pixelresize.app';
-  const routes = [
+  const staticRoutes = [
     '',
-    '/resize',
-    '/compress',
-    '/crop',
-    '/rotate',
-    '/flip',
-    '/convert',
-    '/watermark',
-    '/batch',
     '/pricing',
     '/blog',
     '/faq',
@@ -21,10 +14,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/terms',
   ];
 
-  return routes.map((route) => ({
+  const toolRoutes = TOOLS.map((t) => t.href);
+  const blogRoutes = [
+    '/blog/png-vs-jpeg-vs-webp',
+    '/blog/how-to-compress-images-without-losing-quality',
+    '/blog/image-resize-best-practices',
+    '/blog/understanding-aspect-ratios',
+    '/blog/why-browser-based-image-processing',
+    '/blog/watermarking-images-for-copyright-protection',
+  ];
+
+  const allRoutes = [...staticRoutes, ...toolRoutes, ...blogRoutes];
+
+  return allRoutes.map((route) => ({
     url: `${base}${route}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
-    priority: route === '' ? 1 : 0.8,
+    priority: route === '' ? 1 : route.startsWith('/blog/') ? 0.6 : 0.8,
   }));
 }

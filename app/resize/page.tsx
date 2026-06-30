@@ -8,6 +8,8 @@ import { FormatSelector } from '@/components/format-selector';
 import { QualitySlider } from '@/components/quality-slider';
 import { DownloadButton } from '@/components/download-button';
 import { BeforeAfter } from '@/components/before-after';
+import { ImageInfoPanel } from '@/components/image-info-panel';
+import { ResizePresets } from '@/components/resize-presets';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,6 +22,7 @@ import {
   type LoadedImage,
   type ProcessedImage,
   type ImageFormat,
+  type ResizePreset,
 } from '@/lib/image-processing';
 import { toast } from 'sonner';
 import { TOOLS } from '@/lib/site-config';
@@ -37,6 +40,7 @@ export default function ResizePage() {
   const [format, setFormat] = React.useState<ImageFormat>('png');
   const [quality, setQuality] = React.useState(90);
   const [removeMetadata, setRemoveMetadata] = React.useState(true);
+  const [selectedPreset, setSelectedPreset] = React.useState<string | undefined>();
 
   const handleFile = async (files: File[]) => {
     try {
@@ -45,6 +49,7 @@ export default function ResizePage() {
       setWidth(img.width);
       setHeight(img.height);
       setResult(null);
+      setSelectedPreset(undefined);
     } catch (e) {
       toast.error((e as Error).message);
     }
@@ -62,6 +67,13 @@ export default function ResizePage() {
     if (maintainAspect && loaded && v > 0) {
       setWidth(Math.round((v / loaded.height) * loaded.width));
     }
+  };
+
+  const applyPreset = (preset: ResizePreset) => {
+    setSelectedPreset(preset.label);
+    setWidth(preset.width);
+    setHeight(preset.height);
+    setMode('dimensions');
   };
 
   const process = async () => {
@@ -92,8 +104,21 @@ export default function ResizePage() {
       setHeight(loaded.height);
     }
     setPercentage(50);
+    setSelectedPreset(undefined);
     setResult(null);
   };
+
+  React.useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      if (e.key === 'Enter' && loaded) {
+        e.preventDefault();
+        process();
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [loaded, process]);
 
   return (
     <ToolLayout icon={tool.icon} title={tool.title} description={tool.description}>
@@ -124,6 +149,10 @@ export default function ResizePage() {
               <div className="overflow-hidden rounded-xl border border-border checkerboard">
                 <img src={loaded.url} alt="Source" className="block w-full" />
               </div>
+            </div>
+
+            <div className="glass-card rounded-2xl p-4">
+              <ImageInfoPanel image={loaded} />
             </div>
 
             {result && (
@@ -207,6 +236,10 @@ export default function ResizePage() {
                   </div>
                 </TabsContent>
               </Tabs>
+            </div>
+
+            <div className="glass-card rounded-2xl p-6">
+              <ResizePresets onSelect={applyPreset} selected={selectedPreset} />
             </div>
 
             <div className="glass-card space-y-4 rounded-2xl p-6">

@@ -7,6 +7,22 @@ import {
   Repeat2,
   Stamp,
   Layers,
+  Sparkles,
+  Eraser,
+  Droplets,
+  Sun,
+  Contrast,
+  Palette,
+  Eye,
+  ScanLine,
+  QrCode,
+  FileText,
+  Image as ImageIcon,
+  Laugh,
+  IdCard,
+  Wand2,
+  Scissors,
+  Focus,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -17,6 +33,8 @@ export type Tool = {
   description: string;
   icon: LucideIcon;
   color: string;
+  isNew?: boolean;
+  category: 'edit' | 'convert' | 'filter' | 'utility' | 'batch';
 };
 
 export const TOOLS: Tool[] = [
@@ -27,6 +45,7 @@ export const TOOLS: Tool[] = [
     description: 'Resize images to exact dimensions or by percentage while maintaining aspect ratio.',
     icon: Maximize2,
     color: 'from-sky-500 to-blue-600',
+    category: 'edit',
   },
   {
     href: '/compress',
@@ -35,6 +54,7 @@ export const TOOLS: Tool[] = [
     description: 'Shrink image file size with lossless or lossy compression and a quality slider.',
     icon: Minimize2,
     color: 'from-emerald-500 to-teal-600',
+    category: 'edit',
   },
   {
     href: '/crop',
@@ -43,6 +63,7 @@ export const TOOLS: Tool[] = [
     description: 'Crop images to custom ratios for Instagram, YouTube, LinkedIn, passports, and more.',
     icon: Crop,
     color: 'from-amber-500 to-orange-600',
+    category: 'edit',
   },
   {
     href: '/rotate',
@@ -51,6 +72,7 @@ export const TOOLS: Tool[] = [
     description: 'Rotate images by 90°, 180°, 270°, or a custom angle with live preview.',
     icon: RotateCw,
     color: 'from-violet-500 to-purple-600',
+    category: 'edit',
   },
   {
     href: '/flip',
@@ -59,6 +81,7 @@ export const TOOLS: Tool[] = [
     description: 'Flip images horizontally or vertically to create perfect mirror effects.',
     icon: FlipHorizontal2,
     color: 'from-rose-500 to-pink-600',
+    category: 'edit',
   },
   {
     href: '/convert',
@@ -67,6 +90,7 @@ export const TOOLS: Tool[] = [
     description: 'Convert between PNG, JPEG, WEBP, AVIF, BMP, GIF, and ICO with transparency support.',
     icon: Repeat2,
     color: 'from-cyan-500 to-sky-600',
+    category: 'convert',
   },
   {
     href: '/watermark',
@@ -75,6 +99,7 @@ export const TOOLS: Tool[] = [
     description: 'Add text or image watermarks with custom opacity, rotation, position, and scale.',
     icon: Stamp,
     color: 'from-indigo-500 to-blue-600',
+    category: 'edit',
   },
   {
     href: '/batch',
@@ -83,6 +108,167 @@ export const TOOLS: Tool[] = [
     description: 'Resize, compress, or convert multiple images at once and download as a ZIP.',
     icon: Layers,
     color: 'from-fuchsia-500 to-purple-600',
+    category: 'batch',
+  },
+  {
+    href: '/blur',
+    title: 'Blur',
+    short: 'Soften images',
+    description: 'Apply Gaussian blur to soften images, hide sensitive content, or create depth.',
+    icon: Droplets,
+    color: 'from-blue-500 to-cyan-600',
+    isNew: true,
+    category: 'filter',
+  },
+  {
+    href: '/sharpen',
+    title: 'Sharpen',
+    short: 'Enhance detail',
+    description: 'Sharpen images to enhance edges and bring out fine details.',
+    icon: Focus,
+    color: 'from-teal-500 to-emerald-600',
+    isNew: true,
+    category: 'filter',
+  },
+  {
+    href: '/brightness',
+    title: 'Brightness',
+    short: 'Adjust light',
+    description: 'Adjust image brightness to lighten dark photos or tone down overexposed ones.',
+    icon: Sun,
+    color: 'from-amber-400 to-yellow-600',
+    isNew: true,
+    category: 'filter',
+  },
+  {
+    href: '/contrast',
+    title: 'Contrast',
+    short: 'Adjust range',
+    description: 'Adjust image contrast to make colors pop or create dramatic effects.',
+    icon: Contrast,
+    color: 'from-orange-500 to-red-600',
+    isNew: true,
+    category: 'filter',
+  },
+  {
+    href: '/saturation',
+    title: 'Saturation',
+    short: 'Adjust color',
+    description: 'Adjust color saturation to make images vibrant or create muted tones.',
+    icon: Palette,
+    color: 'from-pink-500 to-rose-600',
+    isNew: true,
+    category: 'filter',
+  },
+  {
+    href: '/grayscale',
+    title: 'Grayscale',
+    short: 'Remove color',
+    description: 'Convert images to grayscale or partial black-and-white for a classic look.',
+    icon: ScanLine,
+    color: 'from-slate-500 to-gray-600',
+    isNew: true,
+    category: 'filter',
+  },
+  {
+    href: '/color-picker',
+    title: 'Color Picker',
+    short: 'Extract colors',
+    description: 'Pick colors from any image and get HEX, RGB, and HSL values instantly.',
+    icon: Eye,
+    color: 'from-violet-500 to-indigo-600',
+    isNew: true,
+    category: 'utility',
+  },
+  {
+    href: '/metadata',
+    title: 'Metadata Viewer',
+    short: 'View EXIF data',
+    description: 'View image metadata including EXIF, dimensions, file size, and color depth.',
+    icon: ScanLine,
+    color: 'from-cyan-500 to-blue-600',
+    isNew: true,
+    category: 'utility',
+  },
+  {
+    href: '/exif-remover',
+    title: 'EXIF Remover',
+    short: 'Strip metadata',
+    description: 'Remove EXIF and metadata from images to protect your privacy.',
+    icon: Eraser,
+    color: 'from-red-500 to-rose-600',
+    isNew: true,
+    category: 'utility',
+  },
+  {
+    href: '/qr-generator',
+    title: 'QR Code Generator',
+    short: 'Create QR codes',
+    description: 'Generate QR codes from any text or URL with custom colors and sizes.',
+    icon: QrCode,
+    color: 'from-emerald-500 to-green-600',
+    isNew: true,
+    category: 'utility',
+  },
+  {
+    href: '/image-to-pdf',
+    title: 'Image to PDF',
+    short: 'Create PDFs',
+    description: 'Convert one or more images into a single PDF document.',
+    icon: FileText,
+    color: 'from-red-500 to-orange-600',
+    isNew: true,
+    category: 'convert',
+  },
+  {
+    href: '/favicon-generator',
+    title: 'Favicon Generator',
+    short: 'Create favicons',
+    description: 'Generate favicons in multiple sizes from a single image for your website.',
+    icon: ImageIcon,
+    color: 'from-blue-500 to-indigo-600',
+    isNew: true,
+    category: 'utility',
+  },
+  {
+    href: '/meme-generator',
+    title: 'Meme Generator',
+    short: 'Create memes',
+    description: 'Add top and bottom text to images to create classic internet memes.',
+    icon: Laugh,
+    color: 'from-yellow-500 to-amber-600',
+    isNew: true,
+    category: 'utility',
+  },
+  {
+    href: '/passport-photo',
+    title: 'Passport Photo',
+    short: 'ID photos',
+    description: 'Create passport and visa photos in the correct size for any country.',
+    icon: IdCard,
+    color: 'from-indigo-500 to-violet-600',
+    isNew: true,
+    category: 'utility',
+  },
+  {
+    href: '/upscaler',
+    title: 'Image Upscaler',
+    short: 'Enlarge images',
+    description: 'Upscale images to higher resolution with quality preservation.',
+    icon: Sparkles,
+    color: 'from-purple-500 to-fuchsia-600',
+    isNew: true,
+    category: 'edit',
+  },
+  {
+    href: '/background-remover',
+    title: 'Background Remover',
+    short: 'Remove backgrounds',
+    description: 'Remove image backgrounds automatically to create transparent PNGs.',
+    icon: Wand2,
+    color: 'from-teal-500 to-cyan-600',
+    isNew: true,
+    category: 'edit',
   },
 ];
 
@@ -98,14 +284,36 @@ export const NAV_LINKS = [
 ];
 
 export const FOOTER_LINKS = {
-  Tools: [
+  'Edit Tools': [
     { href: '/resize', label: 'Resize Images' },
     { href: '/compress', label: 'Compress Images' },
     { href: '/crop', label: 'Crop Images' },
     { href: '/rotate', label: 'Rotate Images' },
     { href: '/flip', label: 'Flip Images' },
-    { href: '/convert', label: 'Convert Images' },
     { href: '/watermark', label: 'Watermark Images' },
+    { href: '/upscaler', label: 'Image Upscaler' },
+    { href: '/background-remover', label: 'Background Remover' },
+  ],
+  'Convert Tools': [
+    { href: '/convert', label: 'Image Converter' },
+    { href: '/image-to-pdf', label: 'Image to PDF' },
+    { href: '/favicon-generator', label: 'Favicon Generator' },
+    { href: '/qr-generator', label: 'QR Code Generator' },
+  ],
+  'Filter Tools': [
+    { href: '/blur', label: 'Blur Image' },
+    { href: '/sharpen', label: 'Sharpen Image' },
+    { href: '/brightness', label: 'Brightness' },
+    { href: '/contrast', label: 'Contrast' },
+    { href: '/saturation', label: 'Saturation' },
+    { href: '/grayscale', label: 'Grayscale' },
+  ],
+  Utilities: [
+    { href: '/color-picker', label: 'Color Picker' },
+    { href: '/metadata', label: 'Metadata Viewer' },
+    { href: '/exif-remover', label: 'EXIF Remover' },
+    { href: '/meme-generator', label: 'Meme Generator' },
+    { href: '/passport-photo', label: 'Passport Photo' },
     { href: '/batch', label: 'Batch Processing' },
   ],
   Company: [
@@ -123,7 +331,7 @@ export const FOOTER_LINKS = {
 export const FAQS = [
   {
     q: 'Is PixelResize really free?',
-    a: 'Yes. All core image tools — resize, compress, crop, rotate, flip, convert, and watermark — are completely free with no watermarks, no sign-up, and no limits on the number of images you process.',
+    a: 'Yes. All image tools — resize, compress, crop, rotate, flip, convert, watermark, filters, QR codes, and more — are completely free with no watermarks, no sign-up, and no limits on the number of images you process.',
   },
   {
     q: 'Are my images uploaded to a server?',
@@ -152,5 +360,13 @@ export const FAQS = [
   {
     q: 'Do you store my processing history?',
     a: 'No. Because everything runs in your browser, we do not store any of your images or processing history. Closing the tab clears everything.',
+  },
+  {
+    q: 'Can I paste an image from my clipboard?',
+    a: 'Yes. Every tool supports pasting images directly from your clipboard using Ctrl+V (or Cmd+V on Mac), or by clicking the paste button in the upload area.',
+  },
+  {
+    q: 'How many tools does PixelResize have?',
+    a: 'PixelResize offers 24 image processing tools across editing, converting, filtering, and utility categories — all free and running entirely in your browser.',
   },
 ];

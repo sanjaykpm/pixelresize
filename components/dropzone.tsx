@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Upload, X, ImageIcon } from 'lucide-react';
+import { Upload, Clipboard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ACCEPTED_TYPES, MAX_FILE_SIZE, formatBytes } from '@/lib/image-processing';
 import { toast } from 'sonner';
@@ -11,9 +11,10 @@ type DropzoneProps = {
   multiple?: boolean;
   className?: string;
   compact?: boolean;
+  showPaste?: boolean;
 };
 
-export function Dropzone({ onFiles, multiple = false, className, compact }: DropzoneProps) {
+export function Dropzone({ onFiles, multiple = false, className, compact, showPaste = true }: DropzoneProps) {
   const [dragging, setDragging] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -33,6 +34,30 @@ export function Dropzone({ onFiles, multiple = false, className, compact }: Drop
       valid.push(file);
     }
     if (valid.length > 0) onFiles(multiple ? valid : [valid[0]]);
+  };
+
+  const handlePaste = async () => {
+    try {
+      const items = await navigator.clipboard.read();
+      const files: File[] = [];
+      for (const item of items) {
+        for (const type of item.types) {
+          if (type.startsWith('image/')) {
+            const blob = await item.getType(type);
+            const ext = type.split('/')[1] || 'png';
+            files.push(new File([blob], `pasted-${Date.now()}.${ext}`, { type }));
+          }
+        }
+      }
+      if (files.length > 0) {
+        onFiles(multiple ? files : [files[0]]);
+        toast.success('Image pasted from clipboard');
+      } else {
+        toast.error('No image found in clipboard');
+      }
+    } catch {
+      toast.error('Clipboard access denied. Try Ctrl+V instead.');
+    }
   };
 
   return (
@@ -95,9 +120,23 @@ export function Dropzone({ onFiles, multiple = false, className, compact }: Drop
         {multiple ? 'Multiple images supported' : 'PNG, JPEG, WEBP, AVIF, BMP, GIF, SVG'}
       </p>
       {!compact && (
-        <p className="mt-2 text-xs text-muted-foreground">
-          Max {formatBytes(MAX_FILE_SIZE)} · Processed locally in your browser
-        </p>
+        <>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Max {formatBytes(MAX_FILE_SIZE)} · Processed locally in your browser
+          </p>
+          {showPaste && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handlePaste();
+              }}
+              className="mt-4 inline-flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-1.5 text-sm font-medium transition-colors hover:bg-accent/5"
+            >
+              <Clipboard className="h-3.5 w-3.5" />
+              Paste from clipboard
+            </button>
+          )}
+        </>
       )}
     </div>
   );
