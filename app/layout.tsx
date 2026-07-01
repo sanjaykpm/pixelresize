@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   description:
     'Fast, secure, free image resizing and editing in your browser. Resize, compress, crop, rotate, flip, convert, and watermark images without losing quality.',
   verification: {
-    google: " google-site-verification: google75ba21e69dba751b.html ",
-  },
+  google: " <meta name="google-site-verification" content="qCGSvOM2q9EXAAPIigAg22XArRLOL1ni_06Jzo-Y63g" /> ",
+},
   keywords: [
     'image resizer',
     'compress image',
