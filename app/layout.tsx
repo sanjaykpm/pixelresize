@@ -11,11 +11,14 @@ export const metadata: Metadata = {
     default: 'PixelResize — Resize Images Online Instantly & Free',
     template: '%s | PixelResize',
   },
+
   description:
     'Fast, secure, free image resizing and editing in your browser. Resize, compress, crop, rotate, flip, convert, and watermark images without losing quality.',
+
   verification: {
-  google: " <meta name="google-site-verification" content="qCGSvOM2q9EXAAPIigAg22XArRLOL1ni_06Jzo-Y63g" /> ",
-},
+    google: 'qCGSvOM2q9EXAAPIigAg22XArRLOL1ni_06Jzo-Y63g',
+  },
+
   keywords: [
     'image resizer',
     'compress image',
@@ -26,18 +29,27 @@ export const metadata: Metadata = {
     'webp converter',
     'online image editor',
   ],
-  authors: [{ name: 'PixelResize' }],
+
+  authors: [
+    {
+      name: 'PixelResize',
+    },
+  ],
+
   creator: 'PixelResize',
-  metadataBase: new URL('https://pixelresize.app'),
+
+  metadataBase: new URL('https://pixelresize.vercel.app'),
+
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://pixelresize.app',
+    url: 'https://pixelresize.vercel.app',
     title: 'PixelResize — Resize Images Online Instantly & Free',
     description:
       'Fast, secure, free image resizing and editing in your browser. No uploads, no sign-up, no quality loss.',
     siteName: 'PixelResize',
   },
+
   twitter: {
     card: 'summary_large_image',
     title: 'PixelResize — Resize Images Online Instantly',
@@ -45,6 +57,7 @@ export const metadata: Metadata = {
       'Fast, secure, free image resizing and editing in your browser.',
     creator: '@pixelresize',
   },
+
   robots: {
     index: true,
     follow: true,
@@ -59,8 +72,14 @@ export const metadata: Metadata = {
 
 export const viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#0a0f1c' },
+    {
+      media: '(prefers-color-scheme: light)',
+      color: '#ffffff',
+    },
+    {
+      media: '(prefers-color-scheme: dark)',
+      color: '#0a0f1c',
+    },
   ],
   width: 'device-width',
   initialScale: 1,
@@ -80,11 +99,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="relative min-h-screen flex flex-col">
+          <div className="relative flex min-h-screen flex-col">
             <SiteHeader />
             <main className="flex-1">{children}</main>
             <SiteFooter />
           </div>
+
           <CommandPalette />
           <Toaster position="bottom-right" />
         </ThemeProvider>
